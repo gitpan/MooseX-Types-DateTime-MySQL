@@ -1,25 +1,42 @@
 package MooseX::Types::DateTime::MySQL;
 use MooseX::Types -declare => [qw/
     MySQLDateTime
+    MySQLDate
 /];
 use MooseX::Types::DateTime qw/ DateTime /;
 use MooseX::Types::Moose qw/ Str /;
 use DateTime::Format::MySQL;
 use namespace::clean;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 subtype MySQLDateTime,
     as Str,
     where { /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/ };
 
+subtype MySQLDate,
+    as Str,
+    where { /\d{4}-\d{2}-\d{2}/ };
+
 coerce MySQLDateTime,
     from DateTime,
     via { DateTime::Format::MySQL->format_datetime($_) };
 
+coerce MySQLDate,
+    from DateTime,
+    via { DateTime::Format::MySQL->format_date($_) };
+
 coerce DateTime,
     from MySQLDateTime,
     via { DateTime::Format::MySQL->parse_datetime($_) };
+
+coerce DateTime,
+    from MySQLDate,
+    via { DateTime::Format::MySQL->parse_date($_) };
+
+coerce MySQLDateTime,
+    from MySQLDate,
+    via { $_ . " 00:00:00" };
 
 1;
 
@@ -37,6 +54,10 @@ from L<MooseX::Types::DateTime>.
 =head2 MySQLDateTime
 
 Coerces to and from C<DateTime>.
+
+=head2 MySQLDate
+
+Coerces to and from C<DateTime> and will coerce to C<MySQLDateTime>.
 
 =head1 BUGS
 
