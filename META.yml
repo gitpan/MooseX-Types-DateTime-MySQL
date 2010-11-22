@@ -19,6 +19,7 @@ no_index:
     - inc
     - t
 requires:
+  DateTime::Format::Duration: 0
   DateTime::Format::MySQL: 0
   MooseX::Types: 0
   MooseX::Types::DateTime: 0.05
@@ -26,4 +27,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/bobtfish/moosex-types-datetime-mysql.git
-version: 0.002
+version: 0.003
